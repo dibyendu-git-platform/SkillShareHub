@@ -26,6 +26,7 @@ const generateAccessandRefreshToken = async (userId) => {
     }
 }
 
+//register user controller
 const registerUser = asyncHandler(async (req, res) => {
     // get user data from request body
     //validation not empty
@@ -64,6 +65,7 @@ const registerUser = asyncHandler(async (req, res) => {
     )
 });
 
+//login user controller
 const logInUser = asyncHandler( async (req, res) => {
    // req body -> data
     // username or email
@@ -113,6 +115,7 @@ const logInUser = asyncHandler( async (req, res) => {
 
 });
 
+//logout user controller
 const logoutUser = asyncHandler(async (req, res) => {
     await User.findByIdAndUpdate(
         req.user._id,
@@ -132,4 +135,15 @@ const logoutUser = asyncHandler(async (req, res) => {
     .json(new ApiResponse(200, {}, "User logged Out"))
 });
 
-export {registerUser, logInUser, logoutUser};
+//Get a user courses and progress
+const getUserCoursesAndProgress = asyncHandler(async (req, res) => {
+    //check if user exists
+    //get userr/instructor courses
+    //get user progress
+
+    const userId = req.user._id;
+
+    const userCourses = await User.findById(userId).populate('enrolledCourses', 'course progress completed');
+});
+
+export {registerUser, logInUser, logoutUser, getUserCoursesAndProgress};
