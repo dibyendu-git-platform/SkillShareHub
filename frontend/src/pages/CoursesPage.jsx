@@ -1,21 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FiSearch, FiFilter } from 'react-icons/fi';
+import axios from 'axios';
 
-const courses = [
-  {
-    id: 1,
-    title: 'Web Development Bootcamp',
-    instructor: 'John Doe',
-    rating: 4.8,
-    students: 1234,
-    price: 99.99,
-    image: 'https://placehold.co/400x300',
-    category: 'Development',
-    level: 'Beginner',
-  },
-  // Add more sample courses here
-];
 
 const categories = [
   'All Categories',
@@ -32,13 +19,33 @@ const prices = ['All Prices', 'Free', 'Paid', 'Under $50', 'Under $100'];
 const ratings = ['All Ratings', '4.5 & up', '4.0 & up', '3.5 & up', '3.0 & up'];
 
 export default function CoursesPage() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All Categories');
-  const [selectedLevel, setSelectedLevel] = useState('All Levels');
-  const [selectedPrice, setSelectedPrice] = useState('All Prices');
-  const [selectedRating, setSelectedRating] = useState('All Ratings');
-  const [showFilters, setShowFilters] = useState(false);
 
+    const [courses, setCourses] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState('All Categories');
+    const [selectedLevel, setSelectedLevel] = useState('All Levels');
+    const [selectedPrice, setSelectedPrice] = useState('All Prices');
+    const [selectedRating, setSelectedRating] = useState('All Ratings');
+    const [showFilters, setShowFilters] = useState(false);
+
+    useEffect(() => {
+        // Fetch courses from API or filter based on search and filters
+        // This is a placeholder for actual data fetching logic
+        // For now, we will use the static courses array defined above
+        axios.get(`${import.meta.env.VITE_BASE_URL}/api/v1/course`)
+            .then(function (response) {
+                // handle success
+                setCourses(response.data);
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            })
+            .finally(function () {
+                // always executed
+            });
+
+    }, []);
   return (
     <div className="container mx-auto px-4 py-8">
       {/* Search and Filter Bar */}
@@ -120,27 +127,27 @@ export default function CoursesPage() {
       {/* Course Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {courses.map((course) => (
-          <div key={course.id} className="card">
+          <div key={course?._id} className="card">
             <img
-              src={course.image}
-              alt={course.title}
+              src={course?.thumbnail}
+              alt={course?.title}
               className="w-full h-48 object-cover rounded-t-lg"
             />
             <div className="p-4">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-sm text-gray-600">{course.category}</span>
-                <span className="text-sm text-gray-600">{course.level}</span>
+                <span className="text-sm text-gray-600">{course?.category}</span>
+                <span className="text-sm text-gray-600">{course?.level}</span>
               </div>
-              <h3 className="text-lg font-semibold mb-2">{course.title}</h3>
-              <p className="text-gray-600 mb-2">by {course.instructor}</p>
+              <h3 className="text-lg font-semibold mb-2">{course?.title}</h3>
+              <p className="text-gray-600 mb-2">by {course?.instructor?.name}</p>
               <div className="flex items-center mb-2">
                 <span className="text-yellow-400">★</span>
                 <span className="ml-1">{course.rating}</span>
-                <span className="text-gray-600 ml-2">({course.students} students)</span>
+                <span className="text-gray-600 ml-2">({course.totalRatings} students)</span>
               </div>
               <div className="flex justify-between items-center">
                 <span className="font-bold">${course.price}</span>
-                <Link to={`/courses/${course.id}`} className="btn btn-primary">
+                <Link to={`/courses/${course._id}`} className="btn btn-primary">
                   Learn More
                 </Link>
               </div>

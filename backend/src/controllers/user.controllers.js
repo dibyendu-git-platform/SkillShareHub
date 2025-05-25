@@ -41,12 +41,15 @@ const registerUser = asyncHandler(async (req, res) => {
     const { name, email, password, role } = req.body;
 
     if ([name, email, password, role].some(field => field.trim() === '')) {
-      throw new ApiError(400, 'All fields are required');  
+         throw new ApiError(400, 'All fields are required');  
     }
 
     const existingUser = await User.findOne({ email });
     if(existingUser) {
-      throw new ApiError(400, 'User already exists');
+        return res.status(400).json(
+            new ApiResponse(400, null, "User already exists")
+        );
+        //throw new ApiError(400, 'User already exists');
     }
 
     const newUser = await User.create({
@@ -87,12 +90,19 @@ const logInUser = asyncHandler( async (req, res) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-        throw new ApiError(404, "User not exists");
+        return res
+            .status(401)
+            .json(new ApiResponse(404, null, "User not exists"));
+        // throw new ApiError(404, "User not exists");
     }
     const isPasswordValid = await user.comparePassword(password);
 
     if (!isPasswordValid) {
-        throw new ApiError(401, "Invalid password");
+        return res
+            .status(401)
+            .json(new ApiResponse(401, null, "Invalid password"));
+
+        // throw new ApiError(401, "Invalid password");
     }
 
     const { accessToken, refreshToken } = await generateAccessandRefreshToken(user._id);

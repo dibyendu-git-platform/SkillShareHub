@@ -1,49 +1,42 @@
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const featuredCourses = [
-  {
-    id: 1,
-    title: 'Web Development Bootcamp',
-    instructor: 'John Doe',
-    rating: 4.8,
-    students: 1234,
-    price: 99.99,
-    image: 'https://placehold.co/400x300',
-  },
-  {
-    id: 2,
-    title: 'Data Science Fundamentals',
-    instructor: 'Jane Smith',
-    rating: 4.7,
-    students: 987,
-    price: 89.99,
-    image: 'https://placehold.co/400x300',
-  },
-  {
-    id: 3,
-    title: 'Digital Marketing Mastery',
-    instructor: 'Mike Johnson',
-    rating: 4.9,
-    students: 2345,
-    price: 79.99,
-    image: 'https://placehold.co/400x300',
-  },
-];
-
 const categories = [
-  { name: 'Development', count: 1234 },
-  { name: 'Business', count: 890 },
-  { name: 'Design', count: 567 },
-  { name: 'Marketing', count: 456 },
-  { name: 'IT & Software', count: 789 },
-  { name: 'Personal Development', count: 345 },
+  { name: 'Development', count: 1 },
+  { name: 'Business', count: 2 },
+  { name: 'Design', count: 3 },
+  { name: 'Marketing', count: 6 },
+  { name: 'IT & Software', count: 1 },
+  { name: 'Personal Development', count: 2 },
 ];
 
 export default function HomePage() {
+
+  const [featuredCourses, setFeaturedCourses] = useState([]);
+
+  useEffect(() => {
+    // Fetch courses from API or filter based on search and filters
+    // This is a placeholder for actual data fetching logic
+    // For now, we will use the static courses array defined above
+    axios.get(`${import.meta.env.VITE_BASE_URL}/api/v1/course`)
+      .then(function (response) {
+          // handle success
+          setFeaturedCourses(response.data);
+      })
+      .catch(function (error) {
+          // handle error
+          console.log(error);
+      })
+      .finally(function () {
+          // always executed
+      });
+
+    }, []);
   return (
     <div className="container mx-auto px-4 py-8">
       {/* Hero Section */}
-      <div className="bg-primary rounded-lg text-white p-8 mb-12">
+      <div className="bg-blue-400 rounded-lg text-white p-8 mb-12">
         <div className="max-w-2xl">
           <h1 className="text-4xl font-bold mb-4">
             Learn New Skills Online with Expert Instructors
@@ -51,7 +44,7 @@ export default function HomePage() {
           <p className="text-lg mb-6">
             Choose from thousands of online courses with new additions published every month
           </p>
-          <Link to="/courses" className="btn bg-white text-primary hover:bg-gray-100">
+          <Link to="/courses" className="btn bg-white text-primary hover:bg-gray-100 p-1 rounded-lg">
             Browse Courses
           </Link>
         </div>
@@ -67,26 +60,27 @@ export default function HomePage() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {featuredCourses.map((course) => (
-            <div key={course.id} className="card">
+            <div key={course?._id} className="card">
               <img
-                src={course.image}
-                alt={course.title}
+                src={course?.thumbnail}
+                alt={course?.title}
                 className="w-full h-48 object-cover rounded-t-lg"
               />
               <div className="p-4">
-                <h3 className="text-lg font-semibold mb-2">{course.title}</h3>
-                <p className="text-gray-600 mb-2">by {course.instructor}</p>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm text-gray-600">{course?.category}</span>
+                  <span className="text-sm text-gray-600">{course?.level}</span>
+                </div>
+                <h3 className="text-lg font-semibold mb-2">{course?.title}</h3>
+                <p className="text-gray-600 mb-2">by {course?.instructor?.name}</p>
                 <div className="flex items-center mb-2">
                   <span className="text-yellow-400">★</span>
                   <span className="ml-1">{course.rating}</span>
-                  <span className="text-gray-600 ml-2">({course.students} students)</span>
+                  <span className="text-gray-600 ml-2">({course.totalRatings} students)</span>
                 </div>
                 <div className="flex justify-between items-center">
                   <span className="font-bold">${course.price}</span>
-                  <Link
-                    to={`/courses/${course.id}`}
-                    className="btn btn-primary"
-                  >
+                  <Link to={`/courses/${course._id}`} className="btn btn-primary">
                     Learn More
                   </Link>
                 </div>

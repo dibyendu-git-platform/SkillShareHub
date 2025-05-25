@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { Disclosure, Menu, Transition } from '@headlessui/react';
+import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { logout } from '../features/auth/authSlice';
 
@@ -50,12 +50,12 @@ export default function Navbar() {
               <div className="hidden sm:ml-6 sm:flex sm:items-center">
                 {isAuthenticated ? (
                   <Menu as="div" className="relative ml-3">
-                    <Menu.Button className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
+                    <MenuButton className="flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2">
                       <span className="sr-only">Open user menu</span>
-                      <div className="h-8 w-8 rounded-full bg-primary text-white flex items-center justify-center">
-                        {user?.name?.[0]?.toUpperCase()}
+                      <div className="h-8 w-8 rounded-full bg-primary text-black flex items-center justify-center">
+                        {user?.name?.toUpperCase()}
                       </div>
-                    </Menu.Button>
+                    </MenuButton>
                     <Transition
                       as={Fragment}
                       enter="transition ease-out duration-200"
@@ -65,8 +65,8 @@ export default function Navbar() {
                       leaveFrom="transform opacity-100 scale-100"
                       leaveTo="transform opacity-0 scale-95"
                     >
-                      <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                        <Menu.Item>
+                      <MenuItems className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                        <MenuItem>
                           {({ active }) => (
                             <Link
                               to="/profile"
@@ -78,9 +78,9 @@ export default function Navbar() {
                               Your Profile
                             </Link>
                           )}
-                        </Menu.Item>
+                        </MenuItem>
                         {user?.role === 'instructor' && (
-                          <Menu.Item>
+                          <MenuItem>
                             {({ active }) => (
                               <Link
                                 to="/instructor/dashboard"
@@ -92,10 +92,10 @@ export default function Navbar() {
                                 Instructor Dashboard
                               </Link>
                             )}
-                          </Menu.Item>
+                          </MenuItem>
                         )}
                         {user?.role === 'admin' && (
-                          <Menu.Item>
+                          <MenuItem>
                             {({ active }) => (
                               <Link
                                 to="/admin/dashboard"
@@ -107,9 +107,9 @@ export default function Navbar() {
                                 Admin Dashboard
                               </Link>
                             )}
-                          </Menu.Item>
+                          </MenuItem>
                         )}
-                        <Menu.Item>
+                        <MenuItem>
                           {({ active }) => (
                             <button
                               onClick={handleLogout}
@@ -121,8 +121,8 @@ export default function Navbar() {
                               Sign out
                             </button>
                           )}
-                        </Menu.Item>
-                      </Menu.Items>
+                        </MenuItem>
+                      </MenuItems>
                     </Transition>
                   </Menu>
                 ) : (
@@ -137,52 +137,52 @@ export default function Navbar() {
                 )}
               </div>
               <div className="-mr-2 flex items-center sm:hidden">
-                <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary">
+                <DisclosureButton className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary">
                   <span className="sr-only">Open main menu</span>
                   {open ? (
                     <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
                   ) : (
                     <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
                   )}
-                </Disclosure.Button>
+                </DisclosureButton>
               </div>
             </div>
           </div>
 
-          <Disclosure.Panel className="sm:hidden">
+          <DisclosurePanel className="sm:hidden">
             <div className="space-y-1 pb-3 pt-2">
               {navigation.map((item) => (
-                <Disclosure.Button
+                <DisclosureButton
                   key={item.name}
                   as={Link}
                   to={item.href}
                   className="block py-2 pl-3 pr-4 text-base font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900"
                 >
                   {item.name}
-                </Disclosure.Button>
+                </DisclosureButton>
               ))}
             </div>
             {!isAuthenticated && (
               <div className="border-t border-gray-200 pb-3 pt-4">
                 <div className="space-y-1">
-                  <Disclosure.Button
+                  <DisclosureButton
                     as={Link}
                     to="/login"
                     className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-900"
                   >
                     Sign in
-                  </Disclosure.Button>
-                  <Disclosure.Button
+                  </DisclosureButton>
+                  <DisclosureButton
                     as={Link}
                     to="/register"
                     className="block px-4 py-2 text-base font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-900"
                   >
                     Sign up
-                  </Disclosure.Button>
+                  </DisclosureButton>
                 </div>
               </div>
             )}
-          </Disclosure.Panel>
+          </DisclosurePanel>
         </>
       )}
     </Disclosure>

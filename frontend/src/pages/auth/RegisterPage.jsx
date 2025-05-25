@@ -1,42 +1,52 @@
 import { useForm } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import { loginStart, loginSuccess, loginFailure } from '../../features/auth/authSlice';
+import axios from 'axios';
+import Swal from 'sweetalert2';
+import { useState } from 'react';
 
 export default function RegisterPage() {
+
+  const [ error, setError ] = useState(null);
+  const [ loading, setLoading ] = useState(false);
+
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm();
-  const dispatch = useDispatch();
+
   const navigate = useNavigate();
-  const { loading, error } = useSelector((state) => state.auth);
-
+  
   const onSubmit = async (data) => {
-    try {
-      dispatch(loginStart());
-      // In a real application, you would make an API call here
-      const response = await fetch('http://localhost:5000/api/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-      
-      const result = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(result.message || 'Registration failed');
-      }
+    setLoading(true);
+    axios.post(`${import.meta.env.VITE_BASE_URL}/api/v1/users/register`, { 
+              name: data.name,
+              email: data.email,
+              password: data.password,
+              role: data.role
+            })
+            .then((response) => {
+              console.log(response);
+              if (!response.data.success) {
+                setError(response.data.message || 'Registration failed');
+                throw new Error(response.data.message || 'Registration failed');
+              }
+              
+              setLoading(false);
+              Swal.fire({
+                title: "Registration Successfull!",
+                text: "Go to login page!",
+                icon: "success"
+              });
 
-      dispatch(loginSuccess(result));
-      navigate('/');
-    } catch (err) {
-      dispatch(loginFailure(err.message));
-    }
+              navigate('/login');
+            })
+            .catch((error) => {
+              setError(error?.response?.data?.message || 'Registration failed');
+              console.error('Registration error:', error?.response?.data?.message);
+              setLoading(false);
+            });
   };
 
   return (
@@ -181,7 +191,7 @@ export default function RegisterPage() {
                 </Link>
               </label>
             </div>
-            {errors.terms && (
+            {errors?.terms && (
               <p className="mt-1 text-sm text-red-600">{errors.terms.message}</p>
             )}
 
@@ -200,7 +210,7 @@ export default function RegisterPage() {
             </div>
           </form>
 
-          <div className="mt-6">
+          {  <div className="mt-6">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-300" />
@@ -221,7 +231,7 @@ export default function RegisterPage() {
                 </svg>
               </button>
             </div>
-          </div>
+          </div> && false}
         </div>
       </div>
     </div>

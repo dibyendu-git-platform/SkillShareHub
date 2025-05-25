@@ -11,17 +11,17 @@ import CoursesPage from './pages/CoursesPage';
 import CourseDetailsPage from './pages/CourseDetailsPage';
 import InstructorDashboard from './pages/instructor/InstructorDashboard';
 import AuthLayout from './layouts/AuthLayout';
-
+import About from './pages/About';
+import UserProfilePage from './pages/auth/UserProfilePage';
 // Placeholder components (to be implemented)
 const AdminDashboard = () => <div>Admin Dashboard</div>;
-const UserProfile = () => <div>User Profile</div>;
 const UnauthorizedPage = () => <div>Unauthorized Access</div>;
 
 function App() {
   return (
     <Provider store={store}>
       <Router>
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gray-50 text-black">
           <Navbar />
           <Routes>
             {/* Public Routes */}
@@ -31,10 +31,11 @@ function App() {
             <Route path="/courses" element={<CoursesPage />} />
             <Route path="/courses/:id" element={<CourseDetailsPage />} />
             <Route path="/unauthorized" element={<UnauthorizedPage />} />
+            <Route path='/about' element={<About/>} />
 
             {/* Protected Routes */}
             <Route element={<AuthLayout />}>
-              <Route path="/profile" element={<UserProfile />} />
+              <Route path="/profile" element={<UserProfilePage />} />
             </Route>
 
             {/* Instructor Routes */}

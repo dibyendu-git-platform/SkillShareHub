@@ -21,7 +21,7 @@ export const getAllCourses = async (req, res) => {
     }
 
     const courses = await Course.find(filter)
-      .select('title thumbnail price rating enrolledCount instructor category') // Limit fields for performance
+      .select('title thumbnail price rating totalRatings enrolledCount instructor category') // Limit fields for performance
       .populate('instructor', 'name email'); // Show instructor name & email
 
     res.json(courses);
