@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { logout } from '../features/auth/authSlice';
+import axios from 'axios';
 
 const navigation = [
   { name: 'Home', href: '/' },
@@ -18,9 +19,31 @@ function classNames(...classes) {
 export default function Navbar() {
   const dispatch = useDispatch();
   const { isAuthenticated, user } = useSelector((state) => state.auth);
+  
 
   const handleLogout = () => {
-    dispatch(logout());
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      console.error('No token found in localStorage');
+      return null; // or handle the case where no token is available
+    }
+    axios.post(`${import.meta.env.VITE_BASE_URL}/api/v1/users/logout`,{
+      //...data
+      },{
+      //Adding token to the request
+      headers: {
+      'Authorization': `Bearer ${token}`
+      }
+      }).then((response) => {
+        // Handle successful logout 
+        console.log(response)  
+        dispatch(logout());
+      }).catch((error) => {
+        // Handle logout error
+        console.error('Logout error:', error?.response?.data?.message);
+      });
+    
   };
 
   return (
@@ -32,7 +55,7 @@ export default function Navbar() {
               <div className="flex">
                 <div className="flex flex-shrink-0 items-center">
                   <Link to="/" className="text-2xl font-bold text-primary">
-                    SkillShareHub
+                    <img src="/SkillShareHub.svg" className='size-20'alt="Logo"/>
                   </Link>
                 </div>
                 <div className="hidden sm:ml-6 sm:flex sm:space-x-8">

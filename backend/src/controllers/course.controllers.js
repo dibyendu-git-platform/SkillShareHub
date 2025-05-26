@@ -1,4 +1,4 @@
-import { asyncHandler } from '../utils/asyncHandeler.js';
+import { asyncHandeler } from '../utils/asyncHandeler.js';
 import { Course } from '../models/course.model.js';
 import { ApiError } from '../utils/ApiError.js';
 import {cloudnaryFileUpload} from '../utils/cloudnary.js';
@@ -48,7 +48,7 @@ export const getSingleCourse = async (req, res) => {
 };
 
 //create course
-export const createCourse = asyncHandler(async (req, res) => {
+export const createCourse = asyncHandeler(async (req, res) => {
     // check if user is instructor or admin
     // check if all fields are present
     // check if courseThumbnail is present

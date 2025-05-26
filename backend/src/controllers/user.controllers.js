@@ -1,4 +1,4 @@
-import { asyncHandler } from '../utils/asyncHandeler.js';
+import { asyncHandeler } from '../utils/asyncHandeler.js';
 import { User } from '../models/user.model.js';
 import { ApiError } from '../utils/ApiError.js';
 import { ApiResponse } from '../utils/ApiResponse.js';
@@ -27,7 +27,7 @@ const generateAccessandRefreshToken = async (userId) => {
 }
 
 //register user controller
-const registerUser = asyncHandler(async (req, res) => {
+const registerUser = asyncHandeler(async (req, res) => {
     // get user data from request body
     //validation not empty
     //check if user already exists
@@ -69,7 +69,7 @@ const registerUser = asyncHandler(async (req, res) => {
 });
 
 //login user controller
-const logInUser = asyncHandler( async (req, res) => {
+const logInUser = asyncHandeler( async (req, res) => {
    // req body -> data
     // username or email
     //find the user
@@ -126,7 +126,7 @@ const logInUser = asyncHandler( async (req, res) => {
 });
 
 //logout user controller
-const logoutUser = asyncHandler(async (req, res) => {
+const logoutUser = asyncHandeler(async (req, res) => {
     await User.findByIdAndUpdate(
         req.user._id,
         {
@@ -146,7 +146,7 @@ const logoutUser = asyncHandler(async (req, res) => {
 });
 
 //Get a user courses and progress
-const getUserCoursesAndProgress = asyncHandler(async (req, res) => {
+const getUserCoursesAndProgress = asyncHandeler(async (req, res) => {
     //check if user exists
     //get userr/instructor courses
     //get user progress
@@ -156,4 +156,22 @@ const getUserCoursesAndProgress = asyncHandler(async (req, res) => {
     const userCourses = await User.findById(userId).populate('enrolledCourses', 'course progress completed');
 });
 
-export {registerUser, logInUser, logoutUser, getUserCoursesAndProgress};
+const checkSession = asyncHandeler(async (req, res) => {
+    //check if user exists
+    //get user data
+    //return response
+
+    const userId = req.user._id;
+
+    const user = await User.findById(userId).select("-password -refreshToken");
+
+    if (!user) {
+        return res.status(404).json({message: "User not found"});
+    }
+
+    return res.status(200).json(
+        new ApiResponse(200, user, "User session is valid")
+    );
+});
+
+export {registerUser, logInUser, logoutUser, getUserCoursesAndProgress, checkSession};
