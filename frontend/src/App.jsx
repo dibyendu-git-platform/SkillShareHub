@@ -23,7 +23,6 @@ const UnauthorizedPage = () => <div>Unauthorized Access</div>;
 function App() {
   const dispatch = useDispatch();
   const { loading, isAuthenticated, user } = useSelector((state) => state.auth);
-  
   useEffect(() => {
     if (isAuthenticated && user) return;
     

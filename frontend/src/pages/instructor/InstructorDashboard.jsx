@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FiPlus, FiEdit2, FiTrash2, FiUsers, FiDollarSign, FiStar } from 'react-icons/fi';
+import { FiPlus, FiEdit2, FiTrash2, FiUsers, FiStar } from 'react-icons/fi';
+import { MdCurrencyRupee } from "react-icons/md";
+import { useEffect } from 'react';
+import axios from 'axios';
+
 
 const courses = [
   {
@@ -22,15 +26,32 @@ const courses = [
 ];
 
 const analytics = {
-  totalStudents: 2124,
-  totalRevenue: 21240,
-  averageRating: 4.75,
-  totalCourses: 2,
+  totalStudents: 0,
+  totalRevenue: 0,
+  averageRating: 0,
+  totalCourses: 0,
 };
 
 export default function InstructorDashboard() {
   const [selectedTab, setSelectedTab] = useState('courses');
+  const [coursesData, setCoursesData] = useState(courses);
 
+  useEffect(() => {
+
+    axios.get(`${import.meta.env.VITE_BASE_URL}/api/v1/course/instructor`, {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    })
+      .then((response) => {
+        setCoursesData(response.data.courses);
+      })
+      .catch((error) => {
+        console.error('Error fetching courses:', error);
+      });
+  }, []);
+  
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-8">
@@ -57,11 +78,11 @@ export default function InstructorDashboard() {
         <div className="card">
           <div className="flex items-center gap-4">
             <div className="p-3 bg-green-100 rounded-full">
-              <FiDollarSign className="text-green-600 text-xl" />
+              <MdCurrencyRupee className="text-green-600 text-xl" />
             </div>
             <div>
               <h3 className="text-lg font-semibold">Total Revenue</h3>
-              <p className="text-2xl font-bold">${analytics.totalRevenue}</p>
+              <p className="text-2xl font-bold">₹{analytics.totalRevenue}</p>
             </div>
           </div>
         </div>
@@ -142,7 +163,7 @@ export default function InstructorDashboard() {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {courses.map((course) => (
+              { coursesData?.map((course) => (
                 <tr key={course.id}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">{course.title}</div>
@@ -185,6 +206,14 @@ export default function InstructorDashboard() {
                   </td>
                 </tr>
               ))}
+              {coursesData.length === 0 &&
+                <tr>
+                  <td colSpan="6" className="px-6 py-4 text-center text-gray-500">
+                    No courses found. Start by creating a new course.
+                  </td>
+                </tr>
+                
+              }
             </tbody>
           </table>
         </div>

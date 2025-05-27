@@ -10,7 +10,8 @@ import {
   updateQuizQuestion,
   deleteQuizQuestion,
   getSingleCourse,
-  getAllCourses, } from "../controllers/course.controllers.js";
+  getAllCourses,
+  getCoursesByInstructor } from "../controllers/course.controllers.js";
 import { Router } from "express";
 import { upload } from "../middlewares/multer.middleware.js"
 import { verifyJWT } from "../middlewares/auth.middleware.js";
@@ -30,7 +31,10 @@ router.route("/create").post(verifyJWT, upload.fields([
 ), createCourse);
 
 // Get single course by ID
-router.get('/:id', verifyJWT, getSingleCourse);
+router.get('/single/:id', verifyJWT, getSingleCourse);
+
+//Get Course by instructor ID
+router.get('/instructor', verifyJWT, getCoursesByInstructor);
 
 // SECTION ROUTES
 router.post('/:courseId/sections', verifyJWT, addSection);
