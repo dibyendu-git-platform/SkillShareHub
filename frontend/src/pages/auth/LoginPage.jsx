@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { loginStart, loginSuccess, loginFailure } from '../../features/auth/authSlice';
 import Swal from 'sweetalert2';
 import axios from 'axios';
@@ -13,7 +13,7 @@ export default function LoginPage() {
   } = useForm();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error } = useSelector((state) => state.auth);
+  const { loading, error, isAuthenticated, user } = useSelector((state) => state.auth);
   
   const onSubmit = async (data) => {
 
@@ -54,7 +54,10 @@ export default function LoginPage() {
               console.error('Registration error:', error?.response?.data?.message);
             });
   };
-
+  // Redirect if already authenticated
+  if (isAuthenticated && user) {
+    return <Navigate to="/profile" replace />;
+  }
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">

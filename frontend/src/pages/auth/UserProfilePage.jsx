@@ -12,7 +12,7 @@ export default function UserProfilePage() {
             <h2 className="text-2xl font-bold mb-4 text-center">My Profile</h2>
             <div className="flex items-center gap-4 mb-6">
             <img
-                src="https://via.placeholder.com/100"
+                src="https://dummyjson.com/image/300x200/008080/ffffff?text=User+Image"
                 alt="Profile"
                 className="w-24 h-24 rounded-full object-cover border"
             />

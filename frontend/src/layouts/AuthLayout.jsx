@@ -1,8 +1,7 @@
 import { useSelector } from 'react-redux';
-import { Navigate, Outlet, useLocation } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 
 const AuthLayout = ({ allowedRoles }) => {
-  const location = useLocation();
 
   const { isAuthenticated, user } = useSelector((state) => state.auth);
 
@@ -12,12 +11,6 @@ const AuthLayout = ({ allowedRoles }) => {
 
   if (allowedRoles && !allowedRoles.includes(user?.role)) {
     return <Navigate to="/unauthorized" replace />;
-  }
-
-  if ((isAuthenticated && user) ) {
-    if (location.pathname === '/login' || location.pathname === '/register') {
-      return <Navigate to="/" replace />;
-    }
   }
 
   return <Outlet />;

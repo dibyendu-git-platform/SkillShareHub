@@ -1,8 +1,9 @@
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 export default function RegisterPage() {
 
@@ -17,7 +18,11 @@ export default function RegisterPage() {
   } = useForm();
 
   const navigate = useNavigate();
-  
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
+  // Redirect if already authenticated  
+  if (isAuthenticated && user) {
+    return <Navigate to="/profile" replace />;
+  }
   const onSubmit = async (data) => {
     setLoading(true);
     axios.post(`${import.meta.env.VITE_BASE_URL}/api/v1/users/register`, { 
