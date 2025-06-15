@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Navbar from './components/Navbar';
@@ -15,6 +15,8 @@ import { useEffect } from 'react';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginStart, loginFailure, updateAuth } from './features/auth/authSlice';
+import AddCourse from './pages/AddCourse';
+import EditCourse from './pages/EditCourse';
 
 // Placeholder components (to be implemented)
 const AdminDashboard = () => <div>Admin Dashboard</div>;
@@ -22,6 +24,7 @@ const UnauthorizedPage = () => <div>Unauthorized Access</div>;
 
 function App() {
   const dispatch = useDispatch();
+
   const { loading, isAuthenticated, user } = useSelector((state) => state.auth);
   useEffect(() => {
     if (isAuthenticated && user) return;
@@ -55,6 +58,7 @@ function App() {
 
   }, [dispatch, isAuthenticated, user]);
 
+  
   if (loading) {
     return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
   }
@@ -80,6 +84,16 @@ function App() {
             {/* Instructor Routes */}
             <Route element={<AuthLayout allowedRoles={['instructor']} />}>
               <Route path="/instructor/dashboard" element={<InstructorDashboard />} />
+            </Route>
+            
+            {/* Add Course Routes */}
+            <Route element={<AuthLayout allowedRoles={['instructor']} />}>
+              <Route path="/instructor/courses/add" element={<AddCourse />} />
+            </Route>
+
+            {/* Edit Course Routes */}
+            <Route element={<AuthLayout allowedRoles={['instructor']} />}>
+              <Route path="/instructor/courses/:id/edit" element={<EditCourse />} />
             </Route>
 
             {/* Admin Routes */}

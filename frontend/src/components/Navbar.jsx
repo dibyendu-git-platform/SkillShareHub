@@ -36,8 +36,8 @@ export default function Navbar() {
       'Authorization': `Bearer ${token}`
       }
       }).then((response) => {
-        // Handle successful logout 
-        console.log(response)  
+        // Handle successful logout  
+        console.log(response);
         dispatch(logout());
       }).catch((error) => {
         // Handle logout error

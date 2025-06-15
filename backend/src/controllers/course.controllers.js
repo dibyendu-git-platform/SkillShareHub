@@ -83,7 +83,6 @@ export const createCourse = asyncHandeler(async (req, res) => {
     }
 
     const courseThumbnailLocalPath = req.files?.courseThumbnail[0].path;
-
     if (!courseThumbnailLocalPath) {
         throw new ApiError(400, 'Course thumbnail is required');
     }
@@ -94,7 +93,7 @@ export const createCourse = asyncHandeler(async (req, res) => {
         title,
         description,
         category,
-        tags,
+        tags: JSON.parse(tags || '[]'),
         price,
         isSubscription,
         thumbnail: courseThumbnail.url,

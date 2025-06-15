@@ -5,26 +5,6 @@ import { MdCurrencyRupee } from "react-icons/md";
 import { useEffect } from 'react';
 import axios from 'axios';
 
-
-const courses = [
-  {
-    id: 1,
-    title: 'Web Development Bootcamp',
-    students: 1234,
-    revenue: 12340,
-    rating: 4.8,
-    status: 'published',
-  },
-  {
-    id: 2,
-    title: 'React for Beginners',
-    students: 890,
-    revenue: 8900,
-    rating: 4.7,
-    status: 'draft',
-  },
-];
-
 const analytics = {
   totalStudents: 0,
   totalRevenue: 0,
@@ -34,7 +14,7 @@ const analytics = {
 
 export default function InstructorDashboard() {
   const [selectedTab, setSelectedTab] = useState('courses');
-  const [coursesData, setCoursesData] = useState(courses);
+  const [coursesData, setCoursesData] = useState([]);
 
   useEffect(() => {
 
@@ -104,7 +84,7 @@ export default function InstructorDashboard() {
             </div>
             <div>
               <h3 className="text-lg font-semibold">Total Courses</h3>
-              <p className="text-2xl font-bold">{analytics.totalCourses}</p>
+              <p className="text-2xl font-bold">{coursesData.length}</p>
             </div>
           </div>
         </div>
@@ -164,7 +144,7 @@ export default function InstructorDashboard() {
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
               { coursesData?.map((course) => (
-                <tr key={course.id}>
+                <tr key={course._id}>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">{course.title}</div>
                   </td>
@@ -194,7 +174,7 @@ export default function InstructorDashboard() {
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <div className="flex justify-end space-x-2">
                       <Link
-                        to={`/instructor/courses/${course.id}/edit`}
+                        to={`/instructor/courses/${course._id}/edit`}
                         className="text-primary hover:text-primary/90"
                       >
                         <FiEdit2 />

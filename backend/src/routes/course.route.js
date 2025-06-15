@@ -11,7 +11,8 @@ import {
   deleteQuizQuestion,
   getSingleCourse,
   getAllCourses,
-  getCoursesByInstructor } from "../controllers/course.controllers.js";
+  getCoursesByInstructor, 
+  updateCourse} from "../controllers/course.controllers.js";
 import { Router } from "express";
 import { upload } from "../middlewares/multer.middleware.js"
 import { verifyJWT } from "../middlewares/auth.middleware.js";
@@ -29,6 +30,9 @@ router.route("/create").post(verifyJWT, upload.fields([
     }
 ]
 ), createCourse);
+
+// Update course by ID
+router.put('/:id', verifyJWT, updateCourse);
 
 // Get single course by ID
 router.get('/single/:id', verifyJWT, getSingleCourse);

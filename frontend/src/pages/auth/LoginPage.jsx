@@ -14,7 +14,7 @@ export default function LoginPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error } = useSelector((state) => state.auth);
-
+  
   const onSubmit = async (data) => {
 
     dispatch(loginStart());
@@ -24,7 +24,6 @@ export default function LoginPage() {
               password: data.password
             })
             .then((response) => {
-              console.log(response);
               if (!response.data.success) {
                 loginFailure(response.data.message || 'Registration failed')
                 throw new Error(response.data.message || 'Registration failed');
@@ -54,44 +53,6 @@ export default function LoginPage() {
               dispatch(loginFailure(error?.response?.data?.message));
               console.error('Registration error:', error?.response?.data?.message);
             });
-
-    // try {
-    //   dispatch(loginStart());
-    //   // In a real application, you would make an API call here
-    //   const response = await fetch('http://localhost:5000/api/auth/login', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify(data),
-    //   });
-      
-    //   const result = await response.json();
-      
-    //   if (!response.ok) {
-    //     throw new Error(result.message || 'Login failed');
-    //   }
-
-    //   dispatch(loginSuccess(result));
-    //   const Toast = Swal.mixin({
-    //     toast: true,
-    //     position: "top-end",
-    //     showConfirmButton: false,
-    //     timer: 3000,
-    //     timerProgressBar: true,
-    //     didOpen: (toast) => {
-    //       toast.onmouseenter = Swal.stopTimer;
-    //       toast.onmouseleave = Swal.resumeTimer;
-    //     }
-    //   });
-    //   Toast.fire({
-    //     icon: "success",
-    //     title: "Signed in successfully"
-    //   });
-    //   navigate('/');
-    // } catch (err) {
-    //   dispatch(loginFailure(err.message));
-    // }
   };
 
   return (
