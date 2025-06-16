@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import { Navigate, Outlet } from 'react-router-dom';
 
-const AuthLayout = ({ allowedRoles }) => {
+const AuthLayout = ({ allowedRoles, children }) => {
 
   const { isAuthenticated, user } = useSelector((state) => state.auth);
 
@@ -13,7 +13,7 @@ const AuthLayout = ({ allowedRoles }) => {
     return <Navigate to="/unauthorized" replace />;
   }
 
-  return <Outlet />;
+  return <>{children}</>;
 };
 
 export default AuthLayout; 

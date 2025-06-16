@@ -36,7 +36,7 @@ export default function InstructorDashboard() {
     <div className="container mx-auto px-4 py-8">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">Instructor Dashboard</h1>
-        <Link to="/instructor/courses/new" className="btn btn-primary flex items-center gap-2">
+        <Link to="/instructor/courses/add" className="btn btn-primary flex items-center gap-2">
           <FiPlus />
           Create New Course
         </Link>
